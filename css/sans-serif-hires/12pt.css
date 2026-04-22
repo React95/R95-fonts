@@ -1,0 +1,10 @@
+@font-face {
+  font-family: 'R95 Sans Serif HiRes 12pt';
+  font-style: normal;
+  font-display: swap;
+  font-weight: normal;
+  src:
+    url("../../sources/sans-serif/120dpi/12pt/R95-sans-serif-hires-12pt.woff2") format("woff2"),
+    url("../../sources/sans-serif/120dpi/12pt/R95-sans-serif-hires-12pt.ttf") format("truetype");
+}
+

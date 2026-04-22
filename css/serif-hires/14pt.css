@@ -1,0 +1,10 @@
+@font-face {
+  font-family: 'R95 Serif HiRes 14pt';
+  font-style: normal;
+  font-display: swap;
+  font-weight: normal;
+  src:
+    url("../../sources/serif/120dpi/14pt/R95-serif-hires-14pt.woff2") format("woff2"),
+    url("../../sources/serif/120dpi/14pt/R95-serif-hires-14pt.ttf") format("truetype");
+}
+
