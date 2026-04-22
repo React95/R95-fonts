@@ -4,5 +4,6 @@
   font-display: swap;
   font-weight: normal;
   src:
-    url("./sources/10pt/R95 Sans serif 10pt.ttf");
+    url("./sources/10pt/MS Serif_10.woff2") format("woff2"),
+    url("./sources/10pt/MS Serif_10.ttf") format("truetype");
 }
