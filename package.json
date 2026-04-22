@@ -33,7 +33,7 @@
     "./sans-serif-hires/18pt": "./sans-serif-hires-18pt.css",
     "./sans-serif-hires/24pt": "./sans-serif-hires-24pt.css"
   },
-  "version": "0.0.3",
+  "version": "1.0.0",
   "scripts": {
     "dev": "vite",
     "build": "tsc && vite build",
