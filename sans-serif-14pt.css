@@ -1,0 +1,10 @@
+@font-face {
+  font-family: 'R95 Sans Serif 14pt';
+  font-style: normal;
+  font-display: swap;
+  font-weight: normal;
+  src:
+    url("./sources/sans-serif/96dpi/14pt/R95-sans-serif-vga-14pt.woff2") format("woff2"),
+    url("./sources/sans-serif/96dpi/14pt/R95-sans-serif-vga-14pt.ttf") format("truetype");
+}
+
