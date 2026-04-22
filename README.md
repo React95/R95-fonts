@@ -1,6 +1,6 @@
 # R95 Fonts
 
-[![Open in Codeflow](https://developer.stackblitz.com/img/open_in_codeflow_small.svg)](https://stackblitz.com/~/github.com/React95/R95-Sans-serif)
+[![Open in Codeflow](https://developer.stackblitz.com/img/open_in_codeflow_small.svg)](https://stackblitz.com/~/github.com/React95/R95-fonts)
 
 MS Serif and MS Sans Serif from Windows 95, converted to TTF and WOFF2 for modern web use.
 Two typefaces, two display resolutions, six point sizes each.
@@ -170,8 +170,8 @@ css/                    ← generated — do not edit by hand
 
 ```bash
 # 1. Clone and install JS dependencies
-git clone https://github.com/React95/R95-Sans-serif
-cd R95-Sans-serif
+git clone https://github.com/React95/R95-fonts
+cd R95-fonts
 pnpm install
 
 # 2. Install Python conversion dependencies
