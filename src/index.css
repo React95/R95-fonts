@@ -7,3 +7,7 @@ html, body {
   box-sizing: border-box;
   cursor: unset;
 }
+
+body {
+  background-color: rgb(85, 170, 170);
+}
