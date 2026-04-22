@@ -14,6 +14,19 @@ Two typefaces, two display resolutions, six point sizes each.
 
 Available sizes: **8, 10, 12, 14, 18, 24 pt**.
 
+## Previews
+
+MS Serif HiRes (120 dpi):
+
+| Size |                  Preview                  |
+| ---- | ----------------------------------------- |
+| 8pt  | ![8pt](./sources/8pt/MS Serif_8.png)    |
+| 10pt | ![10pt](./sources/10pt/MS Serif_10.png) |
+| 12pt | ![12pt](./sources/12pt/MS Serif_12.png) |
+| 14pt | ![14pt](./sources/14pt/MS Serif_14.png) |
+| 18pt | ![18pt](./sources/18pt/MS Serif_18.png) |
+| 24pt | ![24pt](./sources/24pt/MS Serif_24.png) |
+
 ## Installation
 
 ```bash
