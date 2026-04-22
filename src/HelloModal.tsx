@@ -25,7 +25,7 @@ export const HelloModal = () => {
             mt="$20"
             as="textarea"
           >
-            Hello, from R95 Sans Serif
+            Hello, from R95 Fonts
           </Frame>
         );
       }}

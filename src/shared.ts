@@ -1,10 +1,10 @@
+const SIZES = [8, 10, 12, 14, 18, 24] as const;
+
 export const families = [
-  'R95 Sans Serif 8pt',
-  'R95 Sans Serif 10pt',
-  'R95 Sans Serif 12pt',
-  'R95 Sans Serif 14pt',
-  'R95 Sans Serif 18pt',
-  'R95 Sans Serif 24pt',
+  ...SIZES.map((pt) => `R95 Sans Serif ${pt}pt`),
+  ...SIZES.map((pt) => `R95 Sans Serif HiRes ${pt}pt`),
+  ...SIZES.map((pt) => `R95 Serif ${pt}pt`),
+  ...SIZES.map((pt) => `R95 Serif HiRes ${pt}pt`),
 ];
 
 export const basic =
