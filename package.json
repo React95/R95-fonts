@@ -1,5 +1,5 @@
 {
-  "name": "@react95/sans-serif",
+  "name": "@react95/fonts",
   "main": "index.css",
   "description": "MS Serif and MS Sans Serif from Windows 95, converted to TTF and WOFF2",
   "exports": {
