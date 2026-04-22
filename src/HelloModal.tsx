@@ -17,12 +17,12 @@ export const HelloModal = () => {
             className="text"
             boxShadow="in"
             bg="white"
-            p={12}
+            p="$12"
             fontFamily={`'${fontFamily}'`}
-            fontSize={fontSize}
+            fontSize={`${fontSize}px`}
             fontStyle={italic ? 'italic' : 'normal'}
             fontWeight={bold ? 'bold' : 'normal'}
-            mt={20}
+            mt="$20"
             as="textarea"
           >
             Hello, from R95 Sans Serif

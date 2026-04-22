@@ -1,9 +1,11 @@
 import ReactDOM from 'react-dom/client';
 import { ClippyProvider, AGENTS } from '@react95/clippy';
-import { ThemeProvider, GlobalStyle } from '@react95/core';
 import App from './App.tsx';
 
-import '../index.css';
+import '@react95/core/GlobalStyle';
+import '@react95/core/themes/win95.css';
+
+import '../css/index.css';
 
 import './index.css';
 import { ModalProvider } from './ModalProvider.tsx';
@@ -17,12 +19,9 @@ const randomIndex = Math.ceil(Math.random() * availableAgents.length);
 const agent = AGENTS[availableAgents[randomIndex]];
 
 ReactDOM.createRoot(document.getElementById('root')!).render(
-  <ThemeProvider>
-    <ClippyProvider agentName={agent}>
-      <GlobalStyle />
-      <ModalProvider>
-        <App />
-      </ModalProvider>
-    </ClippyProvider>
-  </ThemeProvider>,
+  <ClippyProvider agentName={agent}>
+    <ModalProvider>
+      <App />
+    </ModalProvider>
+  </ClippyProvider>,
 );

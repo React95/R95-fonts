@@ -5,6 +5,7 @@ import {
   Dropdown,
   Input,
   Checkbox,
+  TitleBar,
 } from '@react95/core';
 import { ComponentProps, ReactNode, useContext, useState } from 'react';
 import { families } from './shared';
@@ -23,12 +24,14 @@ const ChangeFontModal = ({
   fontSize: size = 54,
   bold: weight = false,
   italic: style = false,
-  position,
+  position: defaultPosition,
   icon,
 }: {
   renderContent: (props: RenderContentProps) => ReactNode;
   title: string;
-  position: ComponentProps<typeof Modal>['defaultPosition'];
+  position: NonNullable<
+    ComponentProps<typeof Modal>['dragOptions']
+  >['defaultPosition'];
   icon: ComponentProps<typeof Modal>['icon'];
 } & Partial<Omit<RenderContentProps, 'fontFamily'>>) => {
   const [fontSize, setFontSize] = useState(size);
@@ -41,15 +44,22 @@ const ChangeFontModal = ({
     modal.includes(title) && (
       <Modal
         className="default"
-        closeModal={() => {
-          removeModal(title);
-        }}
+        titleBarOptions={[
+          <TitleBar.Close
+            key="close"
+            onClick={() => {
+              removeModal(title);
+            }}
+          />,
+        ]}
         title={title}
-        defaultPosition={position}
+        dragOptions={{
+          defaultPosition,
+        }}
         icon={icon}
       >
         <Fieldset legend="Config">
-          <Frame boxShadow="none" display="flex" gap={8}>
+          <Frame display="flex" gap="$8" alignItems="center">
             <Dropdown
               onChange={({ target }) => {
                 setFontFamily((target as HTMLSelectElement).value);
@@ -60,7 +70,6 @@ const ChangeFontModal = ({
 
             <Input
               type="number"
-              style={{ height: 20 }}
               onChange={({ target }: { target: HTMLInputElement }) => {
                 setFontSize(parseInt(target.value));
               }}
