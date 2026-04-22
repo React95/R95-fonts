@@ -27,21 +27,23 @@ export const AllFontsModal = () => {
         }}
         icon={NAMES.ALL_IN_ONCE.icon}
       >
-        {families.map((family) => {
-          return (
-            <Frame
-              fontFamily={`'${family}'`}
-              boxShadow="in"
-              bg="white"
-              p="$12"
-              fontSize="38px"
-              mt="$4"
-              key={family}
-            >
-              {family}
-            </Frame>
-          );
-        })}
+        <Frame p="$3" maxHeight="300px" overflow="auto">
+          {families.map((family) => {
+            return (
+              <Frame
+                fontFamily={`'${family}'`}
+                boxShadow="$in"
+                bg="white"
+                p="$12"
+                fontSize="38px"
+                mt="$4"
+                key={family}
+              >
+                {family}
+              </Frame>
+            );
+          })}
+        </Frame>
       </Modal>
     )
   );
