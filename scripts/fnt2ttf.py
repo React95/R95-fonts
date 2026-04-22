@@ -244,7 +244,8 @@ def main() -> None:
     # ── Write CSS ──────────────────────────────────────────────────────────────
     print("\nWriting CSS…")
 
-    css_map: dict[str, Path] = {}   # key → css path
+    # family_key (e.g. "sans-serif-96") → { "all": Path, "8": Path, "10": Path, … }
+    css_map: dict[str, dict] = {}
 
     for family in ("serif", "sans-serif"):
         for dpi in (96, 120):
@@ -253,24 +254,46 @@ def main() -> None:
                 continue
             entries.sort(key=lambda x: x[0])
 
-            suffix = "-hires" if dpi == 120 else ""
-            css_name = f"{family}{suffix}.css"
-            css_path = ROOT / css_name
-            css_map[f"{family}-{dpi}"] = css_path
+            suffix   = "-hires" if dpi == 120 else ""
+            key      = f"{family}{suffix}"
+            css_map[key] = {}
 
-            blocks = []
+            # ── per-size CSS files ─────────────────────────────────────────
             for pt, ttf_path, woff2_path in entries:
                 ttf_rel   = "./" + ttf_path.relative_to(ROOT).as_posix()
                 woff2_rel = "./" + woff2_path.relative_to(ROOT).as_posix()
-                blocks.append(font_face(family, dpi, pt, ttf_rel, woff2_rel))
+                block     = font_face(family, dpi, pt, ttf_rel, woff2_rel)
 
-            write_css(css_path, blocks)
+                size_css  = ROOT / f"{key}-{pt}pt.css"
+                write_css(size_css, [block])
+                css_map[key][str(pt)] = size_css
 
-    # index.css imports everything
-    imports = [f'@import "./{p.name}";' for p in css_map.values()]
+            # ── all-sizes CSS file (imports each per-size file) ────────────
+            all_imports = [
+                f'@import "./{css_map[key][str(pt)].name}";'
+                for pt, _, _ in entries
+            ]
+            all_css = ROOT / f"{key}.css"
+            all_css.write_text("\n".join(all_imports) + "\n")
+            print(f"  css → {all_css.name}")
+            css_map[key]["all"] = all_css
+
+    # ── index.css imports every family ────────────────────────────────────────
+    index_imports = [f'@import "./{v["all"].name}";' for v in css_map.values()]
     index_path = ROOT / "index.css"
-    index_path.write_text("\n".join(imports) + "\n")
+    index_path.write_text("\n".join(index_imports) + "\n")
     print(f"  css → index.css")
+
+    # ── Print exports map ─────────────────────────────────────────────────────
+    print("\nSuggested package.json exports:")
+    print('  ".": "./index.css",')
+    for key, files in css_map.items():
+        print(f'  "./{key}": "./{files["all"].name}",')
+        for pt, css_path in sorted(
+            ((k, v) for k, v in files.items() if k != "all"),
+            key=lambda x: int(x[0])
+        ):
+            print(f'  "./{key}/{pt}pt": "./{css_path.name}",')
 
     print("\nDone.")
 
