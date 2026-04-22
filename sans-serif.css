@@ -1,60 +1,6 @@
-@font-face {
-  font-family: 'R95 Sans Serif 8pt';
-  font-style: normal;
-  font-display: swap;
-  font-weight: normal;
-  src:
-    url("./sources/sans-serif/96dpi/8pt/R95-sans-serif-vga-8pt.woff2") format("woff2"),
-    url("./sources/sans-serif/96dpi/8pt/R95-sans-serif-vga-8pt.ttf") format("truetype");
-}
-
-@font-face {
-  font-family: 'R95 Sans Serif 10pt';
-  font-style: normal;
-  font-display: swap;
-  font-weight: normal;
-  src:
-    url("./sources/sans-serif/96dpi/10pt/R95-sans-serif-vga-10pt.woff2") format("woff2"),
-    url("./sources/sans-serif/96dpi/10pt/R95-sans-serif-vga-10pt.ttf") format("truetype");
-}
-
-@font-face {
-  font-family: 'R95 Sans Serif 12pt';
-  font-style: normal;
-  font-display: swap;
-  font-weight: normal;
-  src:
-    url("./sources/sans-serif/96dpi/12pt/R95-sans-serif-vga-12pt.woff2") format("woff2"),
-    url("./sources/sans-serif/96dpi/12pt/R95-sans-serif-vga-12pt.ttf") format("truetype");
-}
-
-@font-face {
-  font-family: 'R95 Sans Serif 14pt';
-  font-style: normal;
-  font-display: swap;
-  font-weight: normal;
-  src:
-    url("./sources/sans-serif/96dpi/14pt/R95-sans-serif-vga-14pt.woff2") format("woff2"),
-    url("./sources/sans-serif/96dpi/14pt/R95-sans-serif-vga-14pt.ttf") format("truetype");
-}
-
-@font-face {
-  font-family: 'R95 Sans Serif 18pt';
-  font-style: normal;
-  font-display: swap;
-  font-weight: normal;
-  src:
-    url("./sources/sans-serif/96dpi/18pt/R95-sans-serif-vga-18pt.woff2") format("woff2"),
-    url("./sources/sans-serif/96dpi/18pt/R95-sans-serif-vga-18pt.ttf") format("truetype");
-}
-
-@font-face {
-  font-family: 'R95 Sans Serif 24pt';
-  font-style: normal;
-  font-display: swap;
-  font-weight: normal;
-  src:
-    url("./sources/sans-serif/96dpi/24pt/R95-sans-serif-vga-24pt.woff2") format("woff2"),
-    url("./sources/sans-serif/96dpi/24pt/R95-sans-serif-vga-24pt.ttf") format("truetype");
-}
-
+@import "./sans-serif-8pt.css";
+@import "./sans-serif-10pt.css";
+@import "./sans-serif-12pt.css";
+@import "./sans-serif-14pt.css";
+@import "./sans-serif-18pt.css";
+@import "./sans-serif-24pt.css";
