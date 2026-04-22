@@ -35,6 +35,7 @@ try:
     import monobit
     from fontTools.fontBuilder import FontBuilder
     from fontTools.pens.ttGlyphPen import TTGlyphPen
+    from fontTools.ttLib import newTable
     from fontTools.ttLib.woff2 import compress as woff2_compress
 except ImportError as e:
     sys.exit(f"Missing dependency: {e}\nRun: pip install monobit fonttools brotli")
@@ -68,17 +69,18 @@ def file_stem(family: str, dpi: int, pt: int) -> str:
 
 # ── Glyph rendering ────────────────────────────────────────────────────────────
 
-def draw_glyph(matrix: tuple, shift_up: int, pen: TTGlyphPen) -> None:
+def draw_glyph(matrix: tuple, shift_up: int, pen: TTGlyphPen, scale: int = 1) -> None:
     """
     Rasterise one bitmap glyph into TrueType contours.
 
     Each horizontal run of 'on' pixels becomes one clockwise rectangle.
-    1 font unit == 1 pixel (UPM == glyph cell height).
+    `scale` is an integer multiplier applied to all coordinates so that
+    UPM = pixel_height * scale stays within the OpenType-valid range (≥ 16).
     """
     height = len(matrix)
     for row_idx, row in enumerate(matrix):
-        y0 = shift_up + (height - 1 - row_idx)   # bottom of pixel row
-        y1 = y0 + 1                                # top   of pixel row
+        y0 = (shift_up + (height - 1 - row_idx)) * scale   # bottom of pixel row
+        y1 = y0 + scale                                      # top   of pixel row
         col, w = 0, len(row)
         while col < w:
             if row[col]:
@@ -86,10 +88,10 @@ def draw_glyph(matrix: tuple, shift_up: int, pen: TTGlyphPen) -> None:
                 while col < w and row[col]:
                     col += 1
                 x1 = col
-                pen.moveTo((x0, y1))
-                pen.lineTo((x1, y1))
-                pen.lineTo((x1, y0))
-                pen.lineTo((x0, y0))
+                pen.moveTo((x0 * scale, y1))
+                pen.lineTo((x1 * scale, y1))
+                pen.lineTo((x1 * scale, y0))
+                pen.lineTo((x0 * scale, y0))
                 pen.closePath()
             else:
                 col += 1
@@ -112,7 +114,11 @@ def convert_font(mb_font, out_dir: Path, family: str, dpi: int, pt: int) -> tupl
     leading      = int(mb_font.leading) if mb_font.leading else 0
     first_glyph  = mb_font.get_glyph(next(iter(mb_font.get_chars())))
     pixel_height = first_glyph.height   # full cell: ascent + descent + internal leading
-    upm          = pixel_height         # 1 unit == 1 pixel
+
+    # OpenType requires unitsPerEm >= 16. Scale up by the smallest integer that
+    # satisfies this, so all glyph coordinates remain integers.
+    scale = max(1, -(-16 // pixel_height))  # ceiling division
+    upm   = pixel_height * scale
 
     # ── Collect glyphs ────────────────────────────────────────────────────────
     glyph_order    = [".notdef"]
@@ -129,7 +135,7 @@ def convert_font(mb_font, out_dir: Path, family: str, dpi: int, pt: int) -> tupl
         name  = f"uni{cp:04X}"
         if name not in glyph_order:
             glyph_order.append(name)
-        advance_widths[name] = int(glyph.advance_width)
+        advance_widths[name] = int(glyph.advance_width) * scale
         glyph_pixels[name]   = (glyph.pixels.as_matrix(), int(glyph.shift_up))
         cmap[cp]             = name
 
@@ -146,7 +152,7 @@ def convert_font(mb_font, out_dir: Path, family: str, dpi: int, pt: int) -> tupl
     for name in glyph_order:
         pen        = TTGlyphPen(None)
         matrix, su = glyph_pixels[name]
-        draw_glyph(matrix, su, pen)
+        draw_glyph(matrix, su, pen, scale)
         glyph_obj  = pen.glyph()
         if glyph_obj.numberOfContours != 0:
             glyph_obj.recalcBounds(None)
@@ -158,7 +164,7 @@ def convert_font(mb_font, out_dir: Path, family: str, dpi: int, pt: int) -> tupl
 
     fb.setupGlyf(glyphs_table)
     fb.setupHorizontalMetrics({n: (advance_widths[n], lsb_map[n]) for n in glyph_order})
-    fb.setupHorizontalHeader(ascent=ascent, descent=-descent)
+    fb.setupHorizontalHeader(ascent=ascent * scale, descent=-(descent * scale))
 
     family_name = css_family(family, dpi, pt)
     fb.setupNameTable({
@@ -174,17 +180,26 @@ def convert_font(mb_font, out_dir: Path, family: str, dpi: int, pt: int) -> tupl
         ),
     })
     fb.setupOS2(
-        sTypoAscender  = ascent,
-        sTypoDescender = -descent,
-        sTypoLineGap   = leading,
-        usWinAscent    = ascent,
-        usWinDescent   = descent,
-        sxHeight       = ascent,
-        sCapHeight     = ascent,
+        sTypoAscender  = ascent * scale,
+        sTypoDescender = -(descent * scale),
+        sTypoLineGap   = leading * scale,
+        # usWinAscent covers ascent + leading so browsers allocate the full cell
+        # and no ink is clipped at the top of the line box.
+        usWinAscent    = (ascent + leading) * scale,
+        usWinDescent   = descent * scale,
+        sxHeight       = ascent * scale,
+        sCapHeight     = ascent * scale,
         fsType         = 0,
     )
     fb.setupPost(isFixedPitch=False)
     fb.setupHead(unitsPerEm=upm)
+
+    # gasp table: grid-fit at all sizes, no grayscale antialiasing.
+    # GASP_GRIDFIT (0x0001) | GASP_SYMMETRIC_GRIDFIT (0x0004) = 0x0005
+    gasp = newTable("gasp")
+    gasp.version = 1
+    gasp.gaspRange = {65535: 0x0005}
+    fb.font["gasp"] = gasp
 
     fb.font.save(str(ttf_path))
 
