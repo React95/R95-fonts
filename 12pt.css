@@ -1,9 +1,0 @@
-@font-face {
-  font-family: 'R95 Sans Serif 12pt';
-  font-style: normal;
-  font-display: swap;
-  font-weight: normal;
-  src:
-    url("./sources/12pt/MS Serif_12.woff2") format("woff2"),
-    url("./sources/12pt/MS Serif_12.ttf") format("truetype");
-}

@@ -1,9 +1,0 @@
-@font-face {
-  font-family: 'R95 Sans Serif 18pt';
-  font-style: normal;
-  font-display: swap;
-  font-weight: normal;
-  src:
-    url("./sources/18pt/MS Serif_18.woff2") format("woff2"),
-    url("./sources/18pt/MS Serif_18.ttf") format("truetype");
-}
