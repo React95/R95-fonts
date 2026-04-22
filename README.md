@@ -17,7 +17,7 @@ Available sizes: **8, 10, 12, 14, 18, 24 pt**.
 ## Installation
 
 ```bash
-npm install @react95/sans-serif
+npm install @react95/fonts
 ```
 
 ## Usage
@@ -28,18 +28,18 @@ Choose as much or as little as you need:
 
 ```js
 // Everything — all 4 variants, all 6 sizes
-import '@react95/sans-serif'
+import '@react95/fonts'
 
 // One full variant (all 6 sizes)
-import '@react95/sans-serif/sans-serif'        // MS Sans Serif 96 dpi  ← classic Win95 UI
-import '@react95/sans-serif/sans-serif-hires'  // MS Sans Serif 120 dpi
-import '@react95/sans-serif/serif'             // MS Serif 96 dpi
-import '@react95/sans-serif/serif-hires'       // MS Serif 120 dpi
+import '@react95/fonts/sans-serif'        // MS Sans Serif 96 dpi  ← classic Win95 UI
+import '@react95/fonts/sans-serif-hires'  // MS Sans Serif 120 dpi
+import '@react95/fonts/serif'             // MS Serif 96 dpi
+import '@react95/fonts/serif-hires'       // MS Serif 120 dpi
 
 // One size from one variant
-import '@react95/sans-serif/sans-serif/14pt'
-import '@react95/sans-serif/serif/8pt'
-import '@react95/sans-serif/sans-serif-hires/24pt'
+import '@react95/fonts/sans-serif/14pt'
+import '@react95/fonts/serif/8pt'
+import '@react95/fonts/sans-serif-hires/24pt'
 ```
 
 ### CSS
