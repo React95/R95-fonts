@@ -1,4 +1,4 @@
-# R95 Sans serif
+# R95 Fonts
 
 [![Open in Codeflow](https://developer.stackblitz.com/img/open_in_codeflow_small.svg)](https://stackblitz.com/~/github.com/React95/R95-Sans-serif)
 
@@ -16,16 +16,49 @@ Available sizes: **8, 10, 12, 14, 18, 24 pt**.
 
 ## Previews
 
-MS Serif HiRes (120 dpi):
+### MS Sans Serif — 96 dpi (VGA)
 
-| Size |                  Preview                  |
-| ---- | ----------------------------------------- |
-| 8pt  | ![8pt](./sources/8pt/MS%20Serif_8.png)    |
-| 10pt | ![10pt](./sources/10pt/MS%20Serif_10.png) |
-| 12pt | ![12pt](./sources/12pt/MS%20Serif_12.png) |
-| 14pt | ![14pt](./sources/14pt/MS%20Serif_14.png) |
-| 18pt | ![18pt](./sources/18pt/MS%20Serif_18.png) |
-| 24pt | ![24pt](./sources/24pt/MS%20Serif_24.png) |
+| Size | Preview |
+| ---- | ------- |
+| 8pt  | ![8pt](./sources/previews/sans-serif/8pt.png) |
+| 10pt | ![10pt](./sources/previews/sans-serif/10pt.png) |
+| 12pt | ![12pt](./sources/previews/sans-serif/12pt.png) |
+| 14pt | ![14pt](./sources/previews/sans-serif/14pt.png) |
+| 18pt | ![18pt](./sources/previews/sans-serif/18pt.png) |
+| 24pt | ![24pt](./sources/previews/sans-serif/24pt.png) |
+
+### MS Sans Serif — 120 dpi (HiRes)
+
+| Size | Preview |
+| ---- | ------- |
+| 8pt  | ![8pt](./sources/previews/sans-serif-hires/8pt.png) |
+| 10pt | ![10pt](./sources/previews/sans-serif-hires/10pt.png) |
+| 12pt | ![12pt](./sources/previews/sans-serif-hires/12pt.png) |
+| 14pt | ![14pt](./sources/previews/sans-serif-hires/14pt.png) |
+| 18pt | ![18pt](./sources/previews/sans-serif-hires/18pt.png) |
+| 24pt | ![24pt](./sources/previews/sans-serif-hires/24pt.png) |
+
+### MS Serif — 96 dpi (VGA)
+
+| Size | Preview |
+| ---- | ------- |
+| 8pt  | ![8pt](./sources/previews/serif/8pt.png) |
+| 10pt | ![10pt](./sources/previews/serif/10pt.png) |
+| 12pt | ![12pt](./sources/previews/serif/12pt.png) |
+| 14pt | ![14pt](./sources/previews/serif/14pt.png) |
+| 18pt | ![18pt](./sources/previews/serif/18pt.png) |
+| 24pt | ![24pt](./sources/previews/serif/24pt.png) |
+
+### MS Serif — 120 dpi (HiRes)
+
+| Size | Preview |
+| ---- | ------- |
+| 8pt  | ![8pt](./sources/previews/serif-hires/8pt.png) |
+| 10pt | ![10pt](./sources/previews/serif-hires/10pt.png) |
+| 12pt | ![12pt](./sources/previews/serif-hires/12pt.png) |
+| 14pt | ![14pt](./sources/previews/serif-hires/14pt.png) |
+| 18pt | ![18pt](./sources/previews/serif-hires/18pt.png) |
+| 24pt | ![24pt](./sources/previews/serif-hires/24pt.png) |
 
 ## Installation
 
@@ -112,8 +145,14 @@ sources/
   sans-serif/
     96dpi/  8pt/ 10pt/ 12pt/ 14pt/ 18pt/ 24pt/   ← generated
     120dpi/ 8pt/ 10pt/ 12pt/ 14pt/ 18pt/ 24pt/   ← generated
+  previews/
+    sans-serif/       8pt.png … 24pt.png          ← generated
+    sans-serif-hires/ 8pt.png … 24pt.png          ← generated
+    serif/            8pt.png … 24pt.png          ← generated
+    serif-hires/      8pt.png … 24pt.png          ← generated
 scripts/
   fnt2ttf.py            ← conversion pipeline (FON → TTF + WOFF2 + CSS)
+  preview.py            ← glyph-sheet PNG generator
 *.css                   ← generated — do not edit by hand
 ```
 
@@ -128,7 +167,7 @@ cd R95-Sans-serif
 pnpm install
 
 # 2. Install Python conversion dependencies
-pip install monobit fonttools brotli
+pip install monobit fonttools brotli pillow
 
 # 3. Start the demo app
 pnpm dev
@@ -143,6 +182,15 @@ python3 scripts/fnt2ttf.py
 The script reads each `.FON` file listed in `FON_SPECS`, converts every embedded
 bitmap font to TTF and WOFF2, and writes all CSS files automatically. It also
 prints a ready-to-paste `exports` block for `package.json` at the end.
+
+### Regenerating the preview images
+
+```bash
+python3 scripts/preview.py
+```
+
+Reads the same `.FON` files directly and renders a glyph sheet (all printable
+characters) for each size into `sources/previews/`.
 
 ### Adding a new FON file
 
