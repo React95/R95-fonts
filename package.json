@@ -1,7 +1,14 @@
 {
   "name": "@react95/sans-serif",
   "main": "index.css",
-  "description": "A port of the old Microsoft font used in Windows 95",
+  "description": "MS Serif and MS Sans Serif from Windows 95, converted to TTF and WOFF2",
+  "exports": {
+    ".": "./index.css",
+    "./serif": "./serif.css",
+    "./serif-hires": "./serif-hires.css",
+    "./sans-serif": "./sans-serif.css",
+    "./sans-serif-hires": "./sans-serif-hires.css"
+  },
   "version": "0.0.3",
   "scripts": {
     "dev": "vite",
@@ -36,7 +43,10 @@
   },
   "files": [
     "*.css",
-    "sources/**/*.ttf"
+    "sources/serif/**/*.ttf",
+    "sources/serif/**/*.woff2",
+    "sources/sans-serif/**/*.ttf",
+    "sources/sans-serif/**/*.woff2"
   ],
   "repository": {
     "type": "git",
