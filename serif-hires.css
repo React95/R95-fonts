@@ -1,0 +1,60 @@
+@font-face {
+  font-family: 'R95 Serif HiRes 8pt';
+  font-style: normal;
+  font-display: swap;
+  font-weight: normal;
+  src:
+    url("./sources/serif/120dpi/8pt/R95-serif-hires-8pt.woff2") format("woff2"),
+    url("./sources/serif/120dpi/8pt/R95-serif-hires-8pt.ttf") format("truetype");
+}
+
+@font-face {
+  font-family: 'R95 Serif HiRes 10pt';
+  font-style: normal;
+  font-display: swap;
+  font-weight: normal;
+  src:
+    url("./sources/serif/120dpi/10pt/R95-serif-hires-10pt.woff2") format("woff2"),
+    url("./sources/serif/120dpi/10pt/R95-serif-hires-10pt.ttf") format("truetype");
+}
+
+@font-face {
+  font-family: 'R95 Serif HiRes 12pt';
+  font-style: normal;
+  font-display: swap;
+  font-weight: normal;
+  src:
+    url("./sources/serif/120dpi/12pt/R95-serif-hires-12pt.woff2") format("woff2"),
+    url("./sources/serif/120dpi/12pt/R95-serif-hires-12pt.ttf") format("truetype");
+}
+
+@font-face {
+  font-family: 'R95 Serif HiRes 14pt';
+  font-style: normal;
+  font-display: swap;
+  font-weight: normal;
+  src:
+    url("./sources/serif/120dpi/14pt/R95-serif-hires-14pt.woff2") format("woff2"),
+    url("./sources/serif/120dpi/14pt/R95-serif-hires-14pt.ttf") format("truetype");
+}
+
+@font-face {
+  font-family: 'R95 Serif HiRes 18pt';
+  font-style: normal;
+  font-display: swap;
+  font-weight: normal;
+  src:
+    url("./sources/serif/120dpi/18pt/R95-serif-hires-18pt.woff2") format("woff2"),
+    url("./sources/serif/120dpi/18pt/R95-serif-hires-18pt.ttf") format("truetype");
+}
+
+@font-face {
+  font-family: 'R95 Serif HiRes 24pt';
+  font-style: normal;
+  font-display: swap;
+  font-weight: normal;
+  src:
+    url("./sources/serif/120dpi/24pt/R95-serif-hires-24pt.woff2") format("woff2"),
+    url("./sources/serif/120dpi/24pt/R95-serif-hires-24pt.ttf") format("truetype");
+}
+
