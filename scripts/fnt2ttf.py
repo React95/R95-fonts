@@ -41,6 +41,7 @@ except ImportError as e:
 
 ROOT       = Path(__file__).resolve().parent.parent
 SOURCES    = ROOT / "sources"
+CSS        = ROOT / "css"
 
 # Each .FON file and the family/resolution it represents.
 FON_SPECS: list[tuple[str, str, int]] = [
@@ -197,6 +198,7 @@ def convert_font(mb_font, out_dir: Path, family: str, dpi: int, pt: int) -> tupl
 # ── CSS generation ─────────────────────────────────────────────────────────────
 
 def font_face(family: str, dpi: int, pt: int, ttf_rel: str, woff2_rel: str) -> str:
+    # Paths are relative to css/{variant}/{pt}pt.css → need ../../ prefix
     return textwrap.dedent(f"""\
         @font-face {{
           font-family: '{css_family(family, dpi, pt)}';
@@ -204,8 +206,8 @@ def font_face(family: str, dpi: int, pt: int, ttf_rel: str, woff2_rel: str) -> s
           font-display: swap;
           font-weight: normal;
           src:
-            url("{woff2_rel}") format("woff2"),
-            url("{ttf_rel}") format("truetype");
+            url("../../{woff2_rel}") format("woff2"),
+            url("../../{ttf_rel}") format("truetype");
         }}
     """)
 
@@ -258,42 +260,47 @@ def main() -> None:
             key      = f"{family}{suffix}"
             css_map[key] = {}
 
-            # ── per-size CSS files ─────────────────────────────────────────
+            # ── per-size CSS files: css/{key}/{pt}pt.css ──────────────────
+            variant_dir = CSS / key
+            variant_dir.mkdir(parents=True, exist_ok=True)
+
             for pt, ttf_path, woff2_path in entries:
-                ttf_rel   = "./" + ttf_path.relative_to(ROOT).as_posix()
-                woff2_rel = "./" + woff2_path.relative_to(ROOT).as_posix()
+                # Paths relative to css/{key}/ → ../../sources/…
+                ttf_rel   = ttf_path.relative_to(ROOT).as_posix()
+                woff2_rel = woff2_path.relative_to(ROOT).as_posix()
                 block     = font_face(family, dpi, pt, ttf_rel, woff2_rel)
 
-                size_css  = ROOT / f"{key}-{pt}pt.css"
+                size_css  = variant_dir / f"{pt}pt.css"
                 write_css(size_css, [block])
                 css_map[key][str(pt)] = size_css
 
-            # ── all-sizes CSS file (imports each per-size file) ────────────
+            # ── all-sizes CSS file: css/{key}.css ─────────────────────────
             all_imports = [
-                f'@import "./{css_map[key][str(pt)].name}";'
+                f'@import "./{key}/{pt}pt.css";'
                 for pt, _, _ in entries
             ]
-            all_css = ROOT / f"{key}.css"
+            all_css = CSS / f"{key}.css"
             all_css.write_text("\n".join(all_imports) + "\n")
-            print(f"  css → {all_css.name}")
+            print(f"  css → css/{all_css.name}")
             css_map[key]["all"] = all_css
 
-    # ── index.css imports every family ────────────────────────────────────────
+    # ── css/index.css imports every family ───────────────────────────────────
+    CSS.mkdir(parents=True, exist_ok=True)
     index_imports = [f'@import "./{v["all"].name}";' for v in css_map.values()]
-    index_path = ROOT / "index.css"
+    index_path = CSS / "index.css"
     index_path.write_text("\n".join(index_imports) + "\n")
-    print(f"  css → index.css")
+    print(f"  css → css/index.css")
 
     # ── Print exports map ─────────────────────────────────────────────────────
     print("\nSuggested package.json exports:")
-    print('  ".": "./index.css",')
+    print('  ".": "./css/index.css",')
     for key, files in css_map.items():
-        print(f'  "./{key}": "./{files["all"].name}",')
+        print(f'  "./{key}": "./css/{files["all"].name}",')
         for pt, css_path in sorted(
             ((k, v) for k, v in files.items() if k != "all"),
             key=lambda x: int(x[0])
         ):
-            print(f'  "./{key}/{pt}pt": "./{css_path.name}",')
+            print(f'  "./{key}/{pt}pt": "./css/{key}/{pt}pt.css",')
 
     print("\nDone.")
 
