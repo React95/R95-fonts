@@ -101,6 +101,8 @@ body {
 
 > **Pixel-perfect rendering** — these are bitmap fonts, so each size has a
 > fixed native pixel height. Set `font-size` to that height for a 1:1 rendering.
+> On macOS/Safari you may also want `-webkit-font-smoothing: none` to suppress
+> subpixel antialiasing.
 >
 > |           Import         |         Family name         | Native height |
 > |--------------------------|-----------------------------|---------------|
@@ -153,7 +155,13 @@ sources/
 scripts/
   fnt2ttf.py            ← conversion pipeline (FON → TTF + WOFF2 + CSS)
   preview.py            ← glyph-sheet PNG generator
-*.css                   ← generated — do not edit by hand
+css/                    ← generated — do not edit by hand
+  index.css
+  sans-serif.css  sans-serif-hires.css  serif.css  serif-hires.css
+  sans-serif/       8pt.css … 24pt.css
+  sans-serif-hires/ 8pt.css … 24pt.css
+  serif/            8pt.css … 24pt.css
+  serif-hires/      8pt.css … 24pt.css
 ```
 
 ### Setting up locally
@@ -199,9 +207,10 @@ characters) for each size into `sources/previews/`.
    ```python
    ("MYNEWFONT.FON", "sans-serif", 96),   # family, dpi
    ```
-3. Run `python3 scripts/fnt2ttf.py`.
+3. Run `python3 scripts/fnt2ttf.py` — fonts, WOFF2, and CSS are generated automatically.
 4. Copy the printed `exports` block into `package.json`.
-5. Update the usage table in this README.
+5. Run `python3 scripts/preview.py` to regenerate the glyph-sheet images.
+6. Update the Previews section and the native-height table in this README.
 
 ### Running the demo app
 
