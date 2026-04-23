@@ -26,6 +26,7 @@ Requirements:
     pip install monobit fonttools brotli
 """
 
+import base64
 import io
 import sys
 import textwrap
@@ -212,8 +213,9 @@ def convert_font(mb_font, out_dir: Path, family: str, dpi: int, pt: int) -> tupl
 
 # ── CSS generation ─────────────────────────────────────────────────────────────
 
-def font_face(family: str, dpi: int, pt: int, ttf_rel: str, woff2_rel: str) -> str:
-    # Paths are relative to css/{variant}/{pt}pt.css → need ../../ prefix
+def font_face(family: str, dpi: int, pt: int, ttf_path: Path, woff2_path: Path) -> str:
+    woff2_b64 = base64.b64encode(woff2_path.read_bytes()).decode()
+    ttf_b64   = base64.b64encode(ttf_path.read_bytes()).decode()
     return textwrap.dedent(f"""\
         @font-face {{
           font-family: '{css_family(family, dpi, pt)}';
@@ -221,8 +223,8 @@ def font_face(family: str, dpi: int, pt: int, ttf_rel: str, woff2_rel: str) -> s
           font-display: swap;
           font-weight: normal;
           src:
-            url("../../{woff2_rel}") format("woff2"),
-            url("../../{ttf_rel}") format("truetype");
+            url("data:font/woff2;base64,{woff2_b64}") format("woff2"),
+            url("data:font/truetype;base64,{ttf_b64}") format("truetype");
         }}
     """)
 
@@ -280,10 +282,7 @@ def main() -> None:
             variant_dir.mkdir(parents=True, exist_ok=True)
 
             for pt, ttf_path, woff2_path in entries:
-                # Paths relative to css/{key}/ → ../../sources/…
-                ttf_rel   = ttf_path.relative_to(ROOT).as_posix()
-                woff2_rel = woff2_path.relative_to(ROOT).as_posix()
-                block     = font_face(family, dpi, pt, ttf_rel, woff2_rel)
+                block = font_face(family, dpi, pt, ttf_path, woff2_path)
 
                 size_css  = variant_dir / f"{pt}pt.css"
                 write_css(size_css, [block])
