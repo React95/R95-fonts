@@ -16,7 +16,8 @@ import { ModalProvider } from './ModalProvider.tsx';
 
 const availableAgents = Object.keys(AGENTS);
 const randomIndex = Math.ceil(Math.random() * availableAgents.length);
-const agent = AGENTS[availableAgents[randomIndex]];
+const agentIndex = availableAgents[randomIndex] as keyof typeof AGENTS;
+const agent = AGENTS[agentIndex];
 
 ReactDOM.createRoot(document.getElementById('root')!).render(
   <ClippyProvider agentName={agent}>
