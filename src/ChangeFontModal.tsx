@@ -74,6 +74,7 @@ const ChangeFontModal = ({
                 setFontSize(parseInt(target.value));
               }}
               defaultValue={fontSize}
+              height="26px"
             />
             <Checkbox checked={italic} onChange={() => setItalic(!italic)}>
               Italic

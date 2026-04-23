@@ -23,12 +23,12 @@ const Rows: FC<RenderContentProps & { charset: string[] }> = ({
             <Frame
               as="td"
               key={`row-${i}-char-${char}`}
-              boxShadow="none"
               fontSize={`${fontSize}px`}
               textAlign="center"
               fontFamily={`'${fontFamily}'`}
               fontStyle={italic ? 'italic' : 'normal'}
               fontWeight={bold ? 'bold' : 'normal'}
+              p="$4"
             >
               {char}
             </Frame>

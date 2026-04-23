@@ -22,12 +22,12 @@ export const AllFontsModal = () => {
         dragOptions={{
           defaultPosition: {
             x: 10,
-            y: 180,
+            y: 280,
           },
         }}
         icon={NAMES.ALL_IN_ONCE.icon}
       >
-        <Frame p="$3" maxHeight="300px" overflow="auto">
+        <Frame p="$3" pt="$0" maxHeight="300px" overflow="auto">
           {families.map((family) => {
             return (
               <Frame
