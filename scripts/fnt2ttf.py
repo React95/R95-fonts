@@ -164,7 +164,7 @@ def convert_font(mb_font, out_dir: Path, family: str, dpi: int, pt: int) -> tupl
 
     fb.setupGlyf(glyphs_table)
     fb.setupHorizontalMetrics({n: (advance_widths[n], lsb_map[n]) for n in glyph_order})
-    fb.setupHorizontalHeader(ascent=ascent * scale, descent=-(descent * scale))
+    fb.setupHorizontalHeader(ascent=(ascent + leading) * scale, descent=-(descent * scale))
 
     family_name = css_family(family, dpi, pt)
     fb.setupNameTable({
