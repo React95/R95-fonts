@@ -17,14 +17,14 @@ const App = () => {
     }
 
     const speak = setTimeout(() => {
-      clippy.speak("Don't forget to star the project ⭐");
+      clippy?.speak("Don't forget to star the project ⭐", false);
     }, 3000);
 
     const animate = setTimeout(() => {
-      const animations = clippy.animations() as string[];
+      const animations = clippy?.animations() as string[];
       const pos = Math.abs(Math.random() * animations.length);
 
-      clippy.Play(animations[pos]);
+      clippy?.play(animations[pos]);
     }, 8000);
 
     return () => {
@@ -35,11 +35,6 @@ const App = () => {
 
   return (
     <>
-      <HelloModal />
-      <AllFontsModal />
-      <SuplementLatin />
-      <BasicLatin />
-
       <TaskBar
         list={
           <List>
@@ -57,6 +52,11 @@ const App = () => {
           </List>
         }
       />
+
+      <HelloModal />
+      <AllFontsModal />
+      <SuplementLatin />
+      <BasicLatin />
     </>
   );
 };
