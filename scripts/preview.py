@@ -42,6 +42,70 @@ FON_SPECS: list[tuple[str, str, int]] = [
 ]
 
 
+_PLACEHOLDER_FALLBACKS: dict[int, int] = {
+    0x0152: 0x004F,  # Œ → O
+    0x0153: 0x006F,  # œ → o
+    0x0160: 0x0053,  # Š → S
+    0x0161: 0x0073,  # š → s
+    0x0178: 0x0059,  # Ÿ → Y
+    0x017D: 0x005A,  # Ž → Z
+    0x017E: 0x007A,  # ž → z
+    0x0192: 0x0066,  # ƒ → f
+    0x02C6: 0x005E,  # ˆ → ^
+    0x02DC: 0x007E,  # ˜ → ~
+    0x2013: 0x002D,  # – → -
+    0x2014: 0x002D,  # — → -
+    0x201A: 0x002C,  # ‚ → ,
+    0x201C: 0x0022,  # " → "
+    0x201D: 0x0022,  # " → "
+    0x201E: 0x0022,  # „ → "
+    0x2020: 0x002B,  # † → +
+    0x2021: 0x002B,  # ‡ → +
+    0x2022: 0x006F,  # • → o
+    0x2026: 0x002E,  # … → .
+    0x2030: 0x0025,  # ‰ → %
+    0x2039: 0x003C,  # ‹ → <
+    0x203A: 0x003E,  # › → >
+    0x20AC: 0x0045,  # € → E
+    0x2122: 0x0054,  # ™ → T
+}
+
+
+def _make_tofu_matrix(height: int, width: int) -> list[list[int]]:
+    margin_v = max(1, height // 5)
+    margin_h = max(1, width // 5)
+    return [
+        [1 if (margin_v <= r < height - margin_v and margin_h <= c < width - margin_h) else 0
+         for c in range(width)]
+        for r in range(height)
+    ]
+
+
+def _fix_placeholders(chars_data: list) -> list:
+    """Substitute shared-bitmap placeholder glyphs with their nearest ASCII stand-in."""
+    from collections import defaultdict
+    cp_to_idx = {cp: i for i, (cp, _, _, _) in enumerate(chars_data)}
+    groups: dict[tuple, list[int]] = defaultdict(list)
+    for i, (_, matrix, _, _) in enumerate(chars_data):
+        key = tuple(tuple(row) for row in matrix)
+        groups[key].append(i)
+    for key, indices in groups.items():
+        if len(indices) < 5:
+            continue
+        h, w = len(key), len(key[0]) if key else 0
+        if h == 0 or w == 0:
+            continue
+        for i in indices:
+            cp, _, adv, su = chars_data[i]
+            fallback_cp = _PLACEHOLDER_FALLBACKS.get(cp)
+            if fallback_cp and fallback_cp in cp_to_idx:
+                _, fb_matrix, fb_adv, _ = chars_data[cp_to_idx[fallback_cp]]
+                chars_data[i] = (cp, fb_matrix, fb_adv, su)
+            else:
+                chars_data[i] = (cp, _make_tofu_matrix(h, w), adv, su)
+    return chars_data
+
+
 def render_font(mb_font, variant: str, pt: int) -> None:
     """Render one bitmap font to a glyph-sheet PNG."""
     # Collect all chars that have a glyph and a printable codepoint.
@@ -61,6 +125,8 @@ def render_font(mb_font, variant: str, pt: int) -> None:
             continue
         chars_data.append((cp, matrix, int(glyph.advance_width), int(glyph.shift_up)))
 
+    chars_data = _fix_placeholders(chars_data)
+
     if not chars_data:
         print(f"  skip {variant}/{pt}pt — no printable glyphs")
         return
@@ -69,32 +135,29 @@ def render_font(mb_font, variant: str, pt: int) -> None:
     chars_data.sort(key=lambda x: x[0])
     rows = [chars_data[i : i + ROW_W] for i in range(0, len(chars_data), ROW_W)]
 
-    cell_h   = len(chars_data[0][1])          # bitmap height (same for all glyphs in a font)
-    shift_up = chars_data[0][3]               # baseline offset (same for all)
-    baseline = cell_h - 1 - shift_up          # row index of baseline pixel in the cell
+    cell_h = len(chars_data[0][1])          # bitmap height (same for all glyphs in a font)
+    cell_w = max(adv for _, _, adv, _ in chars_data)  # fixed cell width = widest glyph
 
-    # Compute width of each row (sum of advance widths).
-    row_widths = [sum(adv for _, _, adv, _ in row) for row in rows]
-    img_w = max(row_widths) + PAD * 2
+    img_w = ROW_W * cell_w + PAD * 2
     img_h = cell_h * len(rows) + PAD * 2
 
     img = Image.new("L", (img_w, img_h), color=BG)
     pixels = img.load()
 
     for row_idx, row in enumerate(rows):
-        x_off = PAD
         y_off = PAD + row_idx * cell_h
-        for _, matrix, adv, _ in row:
-            h = len(matrix)
+        for col_idx, (_, matrix, _, _) in enumerate(row):
+            x_cell = PAD + col_idx * cell_w
+            glyph_w = len(matrix[0]) if matrix else 0
+            x_off = x_cell + (cell_w - glyph_w) // 2   # center glyph in cell
             for r, row_bits in enumerate(matrix):
                 py = y_off + r
                 if py >= img_h:
                     continue
                 for c, bit in enumerate(row_bits):
                     px = x_off + c
-                    if px < img_w and bit:
+                    if 0 <= px < img_w and bit:
                         pixels[px, py] = FG
-            x_off += adv
 
     out_dir = PREVIEWS / variant
     out_dir.mkdir(parents=True, exist_ok=True)
