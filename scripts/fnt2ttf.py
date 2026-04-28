@@ -70,6 +70,86 @@ def file_stem(family: str, dpi: int, pt: int) -> str:
 
 # ── Glyph rendering ────────────────────────────────────────────────────────────
 
+# Nearest designed ASCII/Latin-1 stand-in for each undesigned extended character.
+# Applied when ≥5 glyphs share the same bitmap (= placeholder group in the .FON).
+PLACEHOLDER_FALLBACKS: dict[int, int] = {
+    0x0152: 0x004F,  # Œ → O
+    0x0153: 0x006F,  # œ → o
+    0x0160: 0x0053,  # Š → S
+    0x0161: 0x0073,  # š → s
+    0x0178: 0x0059,  # Ÿ → Y
+    0x017D: 0x005A,  # Ž → Z
+    0x017E: 0x007A,  # ž → z
+    0x0192: 0x0066,  # ƒ → f
+    0x02C6: 0x005E,  # ˆ → ^
+    0x02DC: 0x007E,  # ˜ → ~
+    0x2013: 0x002D,  # – → -
+    0x2014: 0x002D,  # — → -
+    0x201A: 0x002C,  # ‚ → ,
+    0x201C: 0x0022,  # " → "
+    0x201D: 0x0022,  # " → "
+    0x201E: 0x0022,  # „ → "
+    0x2020: 0x002B,  # † → +
+    0x2021: 0x002B,  # ‡ → +
+    0x2022: 0x006F,  # • → o
+    0x2026: 0x002E,  # … → .
+    0x2030: 0x0025,  # ‰ → %
+    0x2039: 0x003C,  # ‹ → <
+    0x203A: 0x003E,  # › → >
+    0x20AC: 0x0045,  # € → E
+    0x2122: 0x0054,  # ™ → T
+}
+
+
+def make_tofu_matrix(height: int, width: int) -> list[list[int]]:
+    """Filled-rectangle placeholder for glyphs with no known ASCII stand-in."""
+    margin_v = max(1, height // 5)
+    margin_h = max(1, width // 5)
+    return [
+        [1 if (margin_v <= r < height - margin_v and margin_h <= c < width - margin_h) else 0
+         for c in range(width)]
+        for r in range(height)
+    ]
+
+
+def fix_broken_placeholders(
+    glyph_pixels: dict,
+    advance_widths: dict,
+    cmap: dict,
+) -> None:
+    """
+    Replace placeholder glyphs that share an identical bitmap.
+
+    In the original .FON files, extended characters that were never designed
+    all point to the same bitmap. Detect these groups (≥5 glyphs with
+    identical pixels) and substitute each with its nearest ASCII/Latin-1
+    stand-in from PLACEHOLDER_FALLBACKS, or a tofu box if none is defined.
+    """
+    matrix_to_names: dict[tuple, list[str]] = {}
+    for name, (matrix, _) in glyph_pixels.items():
+        if name == ".notdef" or not matrix:
+            continue
+        key = tuple(tuple(row) for row in matrix)
+        matrix_to_names.setdefault(key, []).append(name)
+
+    name_to_cp = {v: k for k, v in cmap.items()}
+
+    for key, names in matrix_to_names.items():
+        if len(names) < 5:
+            continue
+        h, w = len(key), len(key[0]) if key else 0
+        for name in names:
+            cp = name_to_cp.get(name)
+            fallback_cp = PLACEHOLDER_FALLBACKS.get(cp) if cp is not None else None
+            fallback_name = f"uni{fallback_cp:04X}" if fallback_cp else None
+            _, su = glyph_pixels[name]
+            if fallback_name and fallback_name in glyph_pixels:
+                glyph_pixels[name] = (glyph_pixels[fallback_name][0], su)
+                advance_widths[name] = advance_widths[fallback_name]
+            elif h > 0 and w > 0:
+                glyph_pixels[name] = (make_tofu_matrix(h, w), su)
+
+
 def draw_glyph(matrix: tuple, shift_up: int, pen: TTGlyphPen, scale: int = 1) -> None:
     """
     Rasterise one bitmap glyph into TrueType contours.
@@ -143,6 +223,8 @@ def convert_font(mb_font, out_dir: Path, family: str, dpi: int, pt: int) -> tupl
     space_width            = advance_widths.get("uni0020", upm // 4)
     advance_widths[".notdef"] = space_width
     glyph_pixels[".notdef"]   = ((), 0)
+
+    fix_broken_placeholders(glyph_pixels, advance_widths, cmap)
 
     # ── Build outlines ────────────────────────────────────────────────────────
     fb = FontBuilder(upm, isTTF=True)
