@@ -4,37 +4,124 @@
   "types": "./css/index.d.ts",
   "description": "MS Serif and MS Sans Serif from Windows 95, converted to TTF and WOFF2",
   "exports": {
-    ".": { "types": "./css/index.d.ts", "default": "./css/index.css" },
-    "./serif": { "types": "./css/index.d.ts", "default": "./css/serif.css" },
-    "./serif/8pt": { "types": "./css/index.d.ts", "default": "./css/serif/8pt.css" },
-    "./serif/10pt": { "types": "./css/index.d.ts", "default": "./css/serif/10pt.css" },
-    "./serif/12pt": { "types": "./css/index.d.ts", "default": "./css/serif/12pt.css" },
-    "./serif/14pt": { "types": "./css/index.d.ts", "default": "./css/serif/14pt.css" },
-    "./serif/18pt": { "types": "./css/index.d.ts", "default": "./css/serif/18pt.css" },
-    "./serif/24pt": { "types": "./css/index.d.ts", "default": "./css/serif/24pt.css" },
-    "./serif-hires": { "types": "./css/index.d.ts", "default": "./css/serif-hires.css" },
-    "./serif-hires/8pt": { "types": "./css/index.d.ts", "default": "./css/serif-hires/8pt.css" },
-    "./serif-hires/10pt": { "types": "./css/index.d.ts", "default": "./css/serif-hires/10pt.css" },
-    "./serif-hires/12pt": { "types": "./css/index.d.ts", "default": "./css/serif-hires/12pt.css" },
-    "./serif-hires/14pt": { "types": "./css/index.d.ts", "default": "./css/serif-hires/14pt.css" },
-    "./serif-hires/18pt": { "types": "./css/index.d.ts", "default": "./css/serif-hires/18pt.css" },
-    "./serif-hires/24pt": { "types": "./css/index.d.ts", "default": "./css/serif-hires/24pt.css" },
-    "./sans-serif": { "types": "./css/index.d.ts", "default": "./css/sans-serif.css" },
-    "./sans-serif/8pt": { "types": "./css/index.d.ts", "default": "./css/sans-serif/8pt.css" },
-    "./sans-serif/10pt": { "types": "./css/index.d.ts", "default": "./css/sans-serif/10pt.css" },
-    "./sans-serif/12pt": { "types": "./css/index.d.ts", "default": "./css/sans-serif/12pt.css" },
-    "./sans-serif/14pt": { "types": "./css/index.d.ts", "default": "./css/sans-serif/14pt.css" },
-    "./sans-serif/18pt": { "types": "./css/index.d.ts", "default": "./css/sans-serif/18pt.css" },
-    "./sans-serif/24pt": { "types": "./css/index.d.ts", "default": "./css/sans-serif/24pt.css" },
-    "./sans-serif-hires": { "types": "./css/index.d.ts", "default": "./css/sans-serif-hires.css" },
-    "./sans-serif-hires/8pt": { "types": "./css/index.d.ts", "default": "./css/sans-serif-hires/8pt.css" },
-    "./sans-serif-hires/10pt": { "types": "./css/index.d.ts", "default": "./css/sans-serif-hires/10pt.css" },
-    "./sans-serif-hires/12pt": { "types": "./css/index.d.ts", "default": "./css/sans-serif-hires/12pt.css" },
-    "./sans-serif-hires/14pt": { "types": "./css/index.d.ts", "default": "./css/sans-serif-hires/14pt.css" },
-    "./sans-serif-hires/18pt": { "types": "./css/index.d.ts", "default": "./css/sans-serif-hires/18pt.css" },
-    "./sans-serif-hires/24pt": { "types": "./css/index.d.ts", "default": "./css/sans-serif-hires/24pt.css" }
+    ".": {
+      "types": "./css/index.d.ts",
+      "default": "./css/index.css"
+    },
+    "./serif": {
+      "types": "./css/index.d.ts",
+      "default": "./css/serif.css"
+    },
+    "./serif/8pt": {
+      "types": "./css/index.d.ts",
+      "default": "./css/serif/8pt.css"
+    },
+    "./serif/10pt": {
+      "types": "./css/index.d.ts",
+      "default": "./css/serif/10pt.css"
+    },
+    "./serif/12pt": {
+      "types": "./css/index.d.ts",
+      "default": "./css/serif/12pt.css"
+    },
+    "./serif/14pt": {
+      "types": "./css/index.d.ts",
+      "default": "./css/serif/14pt.css"
+    },
+    "./serif/18pt": {
+      "types": "./css/index.d.ts",
+      "default": "./css/serif/18pt.css"
+    },
+    "./serif/24pt": {
+      "types": "./css/index.d.ts",
+      "default": "./css/serif/24pt.css"
+    },
+    "./serif-hires": {
+      "types": "./css/index.d.ts",
+      "default": "./css/serif-hires.css"
+    },
+    "./serif-hires/8pt": {
+      "types": "./css/index.d.ts",
+      "default": "./css/serif-hires/8pt.css"
+    },
+    "./serif-hires/10pt": {
+      "types": "./css/index.d.ts",
+      "default": "./css/serif-hires/10pt.css"
+    },
+    "./serif-hires/12pt": {
+      "types": "./css/index.d.ts",
+      "default": "./css/serif-hires/12pt.css"
+    },
+    "./serif-hires/14pt": {
+      "types": "./css/index.d.ts",
+      "default": "./css/serif-hires/14pt.css"
+    },
+    "./serif-hires/18pt": {
+      "types": "./css/index.d.ts",
+      "default": "./css/serif-hires/18pt.css"
+    },
+    "./serif-hires/24pt": {
+      "types": "./css/index.d.ts",
+      "default": "./css/serif-hires/24pt.css"
+    },
+    "./sans-serif": {
+      "types": "./css/index.d.ts",
+      "default": "./css/sans-serif.css"
+    },
+    "./sans-serif/8pt": {
+      "types": "./css/index.d.ts",
+      "default": "./css/sans-serif/8pt.css"
+    },
+    "./sans-serif/10pt": {
+      "types": "./css/index.d.ts",
+      "default": "./css/sans-serif/10pt.css"
+    },
+    "./sans-serif/12pt": {
+      "types": "./css/index.d.ts",
+      "default": "./css/sans-serif/12pt.css"
+    },
+    "./sans-serif/14pt": {
+      "types": "./css/index.d.ts",
+      "default": "./css/sans-serif/14pt.css"
+    },
+    "./sans-serif/18pt": {
+      "types": "./css/index.d.ts",
+      "default": "./css/sans-serif/18pt.css"
+    },
+    "./sans-serif/24pt": {
+      "types": "./css/index.d.ts",
+      "default": "./css/sans-serif/24pt.css"
+    },
+    "./sans-serif-hires": {
+      "types": "./css/index.d.ts",
+      "default": "./css/sans-serif-hires.css"
+    },
+    "./sans-serif-hires/8pt": {
+      "types": "./css/index.d.ts",
+      "default": "./css/sans-serif-hires/8pt.css"
+    },
+    "./sans-serif-hires/10pt": {
+      "types": "./css/index.d.ts",
+      "default": "./css/sans-serif-hires/10pt.css"
+    },
+    "./sans-serif-hires/12pt": {
+      "types": "./css/index.d.ts",
+      "default": "./css/sans-serif-hires/12pt.css"
+    },
+    "./sans-serif-hires/14pt": {
+      "types": "./css/index.d.ts",
+      "default": "./css/sans-serif-hires/14pt.css"
+    },
+    "./sans-serif-hires/18pt": {
+      "types": "./css/index.d.ts",
+      "default": "./css/sans-serif-hires/18pt.css"
+    },
+    "./sans-serif-hires/24pt": {
+      "types": "./css/index.d.ts",
+      "default": "./css/sans-serif-hires/24pt.css"
+    }
   },
-  "version": "1.0.0",
+  "version": "1.0.1",
   "scripts": {
     "dev": "vite",
     "build": "tsc && vite build",
